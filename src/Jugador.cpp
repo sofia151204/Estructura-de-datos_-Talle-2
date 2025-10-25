@@ -16,7 +16,7 @@ Jugador::~Jugador(){
     delete[] positivos;
 }
 
-// tabla de puntos (lado café): 0,1,3,6,10,15,21(6+)
+
 int Jugador::puntosColor(int n) const {
     if (n<=0) return 0;
     if (n==1) return 1;
@@ -28,18 +28,18 @@ int Jugador::puntosColor(int n) const {
 }
 
 void Jugador::recibirCarta(Carta* c){
-    // Determinar tipo por RTTI
+   
     if (auto cc = dynamic_cast<CartaColor*>(c)){
         int idx = colorIndexFromString(cc->getColor());
         if (idx>=0) conteoColores[idx] += 1;
     } else if (dynamic_cast<CartaMasDos*>(c)){
         cartasMasDos += 1;
     } else if (auto comodin = dynamic_cast<CartaComodin*>(c)){
-        // Para la zona: solo contamos; luego se asignan a un color
+       
         if (comodin->getTipo()=="Comodín Dorado") comodinDorado += 1;
         else comodinesNormales += 1;
     } else {
-        // CartaUltimaRonda u otras no afectan la zona del jugador
+       
     }
 }
 
@@ -66,9 +66,9 @@ void Jugador::seleccionarPositivos(const std::vector<int>& indices){
     for (int i=0;i<7;++i) positivos[i]=seen[i];
 }
 
-// top-3 por conteo actual
+
 void Jugador::seleccionarPositivosAuto(){
-    std::vector<std::pair<int,int>> v; // {conteo, idx}
+    std::vector<std::pair<int,int>> v; 
     v.reserve(7);
     for (int i=0;i<7;++i) v.push_back({conteoColores[i], i});
     std::sort(v.begin(), v.end(), [](auto& a, auto& b){ return a.first>b.first; });
@@ -90,11 +90,10 @@ void Jugador::asignarComodin(int colorIdx, bool dorado){
     }
 }
 
-// Heurística simple: empuja comodines a los colores con mayor beneficio marginal,
-// priorizando los que ya son (o probablemente serán) positivos y hasta llegar a 6.
+
 void Jugador::asignarComodinesGreedy(){
     auto delta = [&](int count){
-        // beneficio marginal al pasar de count -> count+1
+     
         return puntosColor(count+1) - puntosColor(count);
     };
 
@@ -104,7 +103,7 @@ void Jugador::asignarComodinesGreedy(){
         int bestGain = -1;
         for (int i=0;i<7;++i){
             int gain = delta(conteoColores[i]);
-            // bonifica un poco si ya está marcado positivo
+            
             if (positivos[i]) gain += 1;
             if (gain>bestGain){
                 bestGain=gain;
@@ -114,7 +113,7 @@ void Jugador::asignarComodinesGreedy(){
         conteoColores[bestIdx] += 1;
         total--;
     }
-    // los contadores de comodines pasan a 0 porque ya los distribuimos
+
     comodinDorado = 0;
     comodinesNormales = 0;
 }

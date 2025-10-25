@@ -12,7 +12,7 @@
 #include "CartaComodin.h"
 #include "CartaUltimaRonda.h"
 
-// Mapa fijo de 7 colores
+
 inline int colorIndexFromString(const std::string& c) {
     if (c=="Rojo") return 0;
     if (c=="Azul") return 1;
@@ -27,16 +27,13 @@ inline int colorIndexFromString(const std::string& c) {
 class Jugador {
     std::string nombre;
 
-    // Zona de juego (memoria dinámica explícita)
-    int* conteoColores;  // tamaño 7
-    bool* positivos;     // tamaño 7
+    int* conteoColores;  
+    bool* positivos;     
 
-    // Otras pilas de la zona
-    int cartasMasDos;        // +2
-    int comodinesNormales;   // 2 posibles
-    int comodinDorado;       // 1 posible
+    int cartasMasDos;       
+    int comodinesNormales;   
+    int comodinDorado;       
 
-    // tabla de puntuación (lado café)
     int puntosColor(int n) const;
 
 public:
@@ -44,20 +41,16 @@ public:
     ~Jugador();
 
     const std::string& getNombre() const { return nombre; }
+   
+    void recibirCarta(Carta* c);                     
+    void mostrarZona() const;     
 
-    // --- Zona de juego ---
-    void recibirCarta(Carta* c);                     // separa por color/+2/comodín
-    void mostrarZona() const;                        // imprime estado de la zona
+    void seleccionarPositivos(const std::vector<int>& indices);
+    void seleccionarPositivosAuto();                 
 
-    // --- Selección de 3 positivos ---
-    void seleccionarPositivos(const std::vector<int>& indices); // manual (0..6)
-    void seleccionarPositivosAuto();                 // automático: top 3 colores
+    void asignarComodin(int colorIdx, bool dorado=false);
+    void asignarComodinesGreedy();                        
 
-    // --- Comodines ---
-    void asignarComodin(int colorIdx, bool dorado=false); // asignación manual
-    void asignarComodinesGreedy();                        // asignación “inteligente” simple
-
-    // --- Puntaje final (lado café) ---
     int puntajeFinal() const;
 };
 
