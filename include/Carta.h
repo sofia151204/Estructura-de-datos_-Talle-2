@@ -1,16 +1,13 @@
-// Carta.h
-#ifndef CARTA_H
-#define CARTA_H
+#pragma once
 #include <string>
+#include <iostream>
 
 class Carta {
-protected:
-    std::string tipo;
-public:
-    Carta(std::string tipo) : tipo(tipo) {}
-    virtual ~Carta() {}
-    virtual void mostrar() const = 0;
-    std::string getTipo() const { return tipo; }
-};
+private:
+    std::string color;
 
-#endif
+public:
+    Carta(std::string color);
+    std::string getColor() const;
+    void mostrar() const;
+};
