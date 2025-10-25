@@ -1,5 +1,5 @@
 #include "Mazo.h"
-#include <iostream>   // para cout/endl
+#include <iostream> 
 
 Mazo::Mazo() {
     cantidad = 63 + 10 + 3 + 1;
