@@ -1,0 +1,5 @@
+# Archivos compilados
+coloretto
+*.exe
+*.o
+*.out
