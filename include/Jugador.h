@@ -2,15 +2,16 @@
 #include "Carta.h"
 #include <vector>
 #include <string>
+using namespace std;
 
 class Jugador {
 private:
-    std::string nombre;
-    std::vector<Carta*> cartas;
+    string nombre;
+    vector<Carta*> cartas;
 public:
-    Jugador(const std::string& nombre);
+    Jugador(const string& nombre);
     ~Jugador(); // destructor que limpia sus cartas
     void recibirCarta(Carta* c);
     void mostrarCartas() const;
-    std::string getNombre() const;
+    string getNombre() const;
 };

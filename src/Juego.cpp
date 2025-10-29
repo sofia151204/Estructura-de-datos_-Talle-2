@@ -1,130 +1,126 @@
 #include "Juego.h"
 #include <iostream>
 #include <limits>
+#include <string>
+using namespace std;
 
-Juego::Juego(int numJugadores) {
-    mazo = new Mazo(); // usa tu constructor existente
-    for (int i = 0; i < numJugadores; ++i) {
-        jugadores.push_back(new Jugador("Jugador " + std::to_string(i + 1)));
-    }
-    pilas.resize(3); // tres pilas en el centro
-    turnoActual = 0;
-}
-
-Juego::~Juego() {
-    // liberar mazo
-    delete mazo;
-    // liberar jugadores y las cartas que tengan
-    for (auto p : jugadores) delete p;
-}
-
-static int leerEnteroSeguro(int minVal, int maxVal) {
+static int leerEnteroSeguro(int minVal, int maxVal) { // valida que la entrada sea un entero dentro de rango
     int x;
     while (true) {
-        if (!(std::cin >> x)) {
-            // limpiar error y descartar la línea
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrada inválida, intente de nuevo: ";
+        if (!(cin >> x)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada invalida, intente de nuevo: ";
             continue;
         }
         if (x < minVal || x > maxVal) {
-            std::cout << "Valor fuera de rango, intente de nuevo: ";
+            cout << "Valor fuera de rango, intente de nuevo: ";
             continue;
         }
-        // limpiar resto de la línea
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return x;
     }
 }
 
+Juego::Juego(int numJugadores) {
+    mazo = new Mazo(); // usa tu Mazo existente
+    for (int i = 0; i < numJugadores; ++i) {
+        jugadores.push_back(new Jugador("Jugador " + to_string(i + 1)));
+    }
+    pilas.resize(3); // 3 pilas en el centro
+    turnoActual = 0;
+}
+
+Juego::~Juego() {
+    delete mazo;
+    for (auto p : jugadores) delete p;
+}
+
 void Juego::iniciar() {
-    std::cout << "🎮 Iniciando Coloretto clásico (" << jugadores.size() << " jugadores)\n";
+    cout << "Iniciando Coloretto clasico (" << jugadores.size() << " jugadores)\n";
 
-    bool terminado = false;
-    while (!mazo->vacio() && !terminado) {
+    while (!mazo->vacio()) {
         turno();
-
-        // si la carta que se robó en turno fue FIN, tu lógica de Mazo debe devolverla y el juego terminará
-        // si implementaste robarCarta() devolviendo nullptr cuando se encontró FIN y se eliminó, ajustar según tu Mazo.
+        // si la carta final fue robada dentro de turno, el mazo->vacio() debería reflejarlo
         turnoActual = (turnoActual + 1) % jugadores.size();
     }
 
-    std::cout << "\n=== Estado final ===\n";
-    for (auto j : jugadores) j->mostrarCartas();
-    std::cout << "\nJuego terminado.\n";
+    cout << "\n=== Estado final ===\n";
+    for (auto j : jugadores) {
+        cout << j->getNombre() << " tiene: ";
+        j->mostrarCartas();
+        cout << "\n";
+    }
+    cout << "\nJuego terminado.\n";
 }
 
 void Juego::turno() {
     Jugador* jugador = jugadores[turnoActual];
-    std::cout << "\n--- Turno de " << jugador->getNombre() << " ---\n";
+    cout << "\n--- Turno de " << jugador->getNombre() << " ---\n";
 
-    std::cout << "Tus cartas: ";
+    cout << "Tus cartas: ";
     jugador->mostrarCartas();
-    std::cout << "\nPilas actuales:\n";
+    cout << "\nPilas actuales:\n";
     for (size_t i = 0; i < pilas.size(); ++i) {
-        std::cout << "Pila " << (i+1) << " (" << pilas[i].tamano() << "): ";
+        cout << "Pila " << (i+1) << " (" << pilas[i].tamano() << "): ";
         pilas[i].mostrar();
-        std::cout << "\n";
+        cout << "\n";
     }
 
-    std::cout << "\nOpciones:\n";
-    std::cout << "1) Robar carta y colocar en una pila\n";
-    std::cout << "2) Tomar una pila (y pasar turno)\n";
-    std::cout << "3) Mostrar mano/pilas nuevamente\n";
-    std::cout << "Elige (1-3): ";
+    cout << "\nOpciones:\n";
+    cout << "1) Robar carta y colocar en una pila\n";
+    cout << "2) Tomar una pila (y quedarse con sus cartas)\n";
+    cout << "3) Mostrar mano-pilas nuevamente\n";
+    cout << "Elige (1-3): ";
 
     int opt = leerEnteroSeguro(1, 3);
 
     if (opt == 1) {
-        Carta* carta = mazo->robarCarta(); // nombre del método según tu Mazo
+        Carta* carta = mazo->robarCarta(); 
         if (!carta) {
-            std::cout << "No hay carta para robar (mazo vacío o carta FIN manejada internamente).\n";
+            cout << "No hay carta para robar.\n";
             return;
         }
 
-        // si es carta FIN, asumimos que carta->getColor() == "FIN"
+        // Detectar carta FIN
         if (carta->getColor() == "FIN") {
-            std::cout << "Carta de Fin de juego revelada!\n";
-            // liberamos la carta final
-            delete carta;
-            // Forzamos terminar el mazo: vaciado o marcar terminado (Aquí simplemente dejamos que el bucle principal vea mazo->vacio())
+            cout << "Carta de Fin de juego revelada!\n";
+            delete carta; // liberamos la carta final
             return;
         }
 
-        std::cout << "Carta robada: ";
+        cout << "Carta robada: ";
         carta->mostrar();
-        std::cout << "\nEn qué pila colocarla (1-" << pilas.size() << ")? ";
+        cout << "\nEn que pila colocarla (1-" << pilas.size() << ")? ";
         int p = leerEnteroSeguro(1, static_cast<int>(pilas.size()));
         pilas[p-1].agregarCarta(carta);
-        std::cout << "Colocada en pila " << p << ".\n";
+        cout << "Colocada en pila " << p << ".\n";
     }
+
     else if (opt == 2) {
-        std::cout << "Qué pila tomar (1-" << pilas.size() << ")? ";
+        cout << "Que pila tomar (1-" << pilas.size() << ")? ";
         int p = leerEnteroSeguro(1, static_cast<int>(pilas.size()));
-        // transferir cartas a jugador
         auto cartas = pilas[p-1].obtenerCartas();
         if (cartas.empty()) {
-            std::cout << "Pila vacía. No se puede tomar.\n";
+            cout << "Pila vacia. No se puede tomar.\n";
             return;
         }
         for (auto c : cartas) {
             jugador->recibirCarta(c);
         }
-        // vaciamos la pila (no borramos punteros, pues fueron transferidos)
         pilas[p-1].vaciar();
-        std::cout << jugador->getNombre() << " tomo la pila " << p << ".\n";
+        cout << jugador->getNombre() << " tomo la pila " << p << ".\n";
     }
-    else {
-        // mostrar de nuevo
-        std::cout << "Mostrando mano y pilas...\n";
-        std::cout << "Tus cartas: ";
+
+    else { // opt == 3
+        cout << "Mostrando mano y pilas...\n";
+        cout << "Tus cartas: ";
         jugador->mostrarCartas();
-        std::cout << "\nPilas actuales:\n";
+        cout << "\nPilas actuales:\n";
         for (size_t i = 0; i < pilas.size(); ++i) {
-            std::cout << "Pila " << (i+1) << ": ";
+            cout << "Pila " << (i+1) << ": ";
             pilas[i].mostrar();
-            std::cout << "\n";
+            cout << "\n";
         }
     }
 }

@@ -1,17 +1,17 @@
 #include "Pila.h"
 #include <iostream>
+using namespace std;
 
 void Pila::agregarCarta(Carta* carta) {
     cartas.push_back(carta);
 }
 
-std::vector<Carta*> Pila::obtenerCartas() const {
+vector<Carta*> Pila::obtenerCartas() const {
     return cartas;
 }
 
-Carta* Pila::ultimaCarta() {
-    if (cartas.empty()) return nullptr;
-    return cartas.back();
+void Pila::vaciar() {
+    cartas.clear();
 }
 
 int Pila::tamano() const {
@@ -19,10 +19,19 @@ int Pila::tamano() const {
 }
 
 void Pila::mostrar() const {
-    if (cartas.empty()) {
-        std::cout << "[vacía]";
-    } else {
-        for (auto c : cartas) std::cout << c->getColor() << " ";
+    cout << "Pila: ";
+    for (const auto& carta : cartas) {
+        cout << carta->toString() << " ";
     }
-    std::cout << "\n";
+    cout << endl;
+}
+
+void Pila::ultimaCarta() {
+    if (!cartas.empty()) {
+        cout << "Última carta en la pila: ";
+        cartas.back()->mostrar();
+        cout << endl;
+    } else {
+        cout << "La pila está vacía." << endl;
+    }
 }

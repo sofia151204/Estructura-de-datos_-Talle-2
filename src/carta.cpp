@@ -1,11 +1,16 @@
 #include "Carta.h"
+using namespace std;
 
-Carta::Carta(std::string color) : color(color) {}
+Carta::Carta(string color) : color(color) {}
 
-std::string Carta::getColor() const {
+string Carta::getColor() const {
     return color;
 }
 
 void Carta::mostrar() const {
-    std::cout << "[" << color << "]";
+    cout << "[" << color << "]";
+}
+
+string Carta::toString() const {
+    return color;
 }

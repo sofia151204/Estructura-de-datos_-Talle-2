@@ -1,13 +1,16 @@
 #pragma once
 #include <string>
 #include <iostream>
+using namespace std;
 
 class Carta {
 private:
-    std::string color;
+    string color;
 
 public:
-    Carta(std::string color);
-    std::string getColor() const;
+    Carta(string color);
+    string getColor() const;
     void mostrar() const;
+    string toString() const;
+
 };

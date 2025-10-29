@@ -1,7 +1,8 @@
 #include "Jugador.h"
 #include <iostream>
+using namespace std;
 
-Jugador::Jugador(const std::string& nombre) : nombre(nombre) {}
+Jugador::Jugador(const string& nombre) : nombre(nombre) {}
 
 Jugador::~Jugador() {
     // liberar cartas que estén en la mano del jugador
@@ -15,13 +16,13 @@ void Jugador::recibirCarta(Carta* c) {
 
 void Jugador::mostrarCartas() const {
     if (cartas.empty()) {
-        std::cout << "[vacío]";
+        cout << "[vacio]";
         return;
     }
     for (auto c : cartas) {
         c->mostrar();
-        std::cout << " ";
+        cout << " ";
     }
 }
 
-std::string Jugador::getNombre() const { return nombre; }
+string Jugador::getNombre() const { return nombre; }

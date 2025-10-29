@@ -4,11 +4,13 @@
 #include "Mazo.h"
 #include "Pila.h"
 
+using namespace std;
+
 class Juego {
 private:
-    std::vector<Jugador*> jugadores;
+    vector<Jugador*> jugadores;
     Mazo* mazo;
-    std::vector<Pila> pilas;
+    vector<Pila> pilas;
     int turnoActual;
 
 public:

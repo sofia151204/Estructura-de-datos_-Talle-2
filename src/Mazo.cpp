@@ -1,8 +1,9 @@
 #include "Mazo.h"
 #include <iostream>
+using namespace std;
 
 Mazo::Mazo() {
-    std::string colores[] = {"rojo", "verde", "azul", "amarillo", "morado", "naranja", "gris"};
+    string colores[] = {"rojo", "verde", "azul", "amarillo", "morado", "naranja", "gris"};
     int totalColores = sizeof(colores) / sizeof(colores[0]);
 
     cantidad = 7 * 9 + 1; // 9 cartas de cada color + 1 fin de juego
@@ -20,10 +21,10 @@ Mazo::Mazo() {
 }
 
 void Mazo::barajar() {
-    std::vector<Carta*> temp(cartas, cartas + cantidad);
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(temp.begin(), temp.end(), g);
+    vector<Carta*> temp(cartas, cartas + cantidad);
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(temp.begin(), temp.end(), g);
     for (int i = 0; i < cantidad; ++i)
         cartas[i] = temp[i];
 }
@@ -42,5 +43,5 @@ Mazo::~Mazo() {
         delete cartas[i];
     }
     delete[] cartas;
-    std::cout << "Mazo destruido correctamente.\n";
+    cout << "Mazo destruido correctamente.\n";
 }
