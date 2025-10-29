@@ -1,4 +1,4 @@
-#include "Carta.h"
+#include "include/Carta.h"
 
 Carta::Carta(std::string color) : color(color) {}
 

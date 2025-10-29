@@ -1,4 +1,4 @@
-#include "Mazo.h"
+#include "include/Mazo.h"
 #include <iostream>
 
 Mazo::Mazo() {

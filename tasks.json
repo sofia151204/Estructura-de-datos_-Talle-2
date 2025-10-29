@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Coloretto",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "src/*.cpp",
+        "main.cpp",
+        "-Iinclude",
+        "-o",
+        "coloreto.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
