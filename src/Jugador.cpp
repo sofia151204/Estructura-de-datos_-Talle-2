@@ -1,18 +1,27 @@
 #include "Jugador.h"
 #include <iostream>
 
-Jugador::Jugador(std::string nombre) : nombre(nombre) {}
+Jugador::Jugador(const std::string& nombre) : nombre(nombre) {}
 
-void Jugador::recibirCarta(Carta* carta) {
-    cartas.push_back(carta);
+Jugador::~Jugador() {
+    // liberar cartas que estén en la mano del jugador
+    for (auto c : cartas) delete c;
+    cartas.clear();
+}
+
+void Jugador::recibirCarta(Carta* c) {
+    cartas.push_back(c);
 }
 
 void Jugador::mostrarCartas() const {
-    std::cout << nombre << " tiene: ";
-    for (auto c : cartas) c->mostrar();
-    std::cout << "\n";
+    if (cartas.empty()) {
+        std::cout << "[vacío]";
+        return;
+    }
+    for (auto c : cartas) {
+        c->mostrar();
+        std::cout << " ";
+    }
 }
 
-std::string Jugador::getNombre() const {
-    return nombre;
-}
+std::string Jugador::getNombre() const { return nombre; }
