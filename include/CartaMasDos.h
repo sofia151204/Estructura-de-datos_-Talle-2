@@ -1,4 +1,4 @@
-// CartaMasDos.h
+/* CartaMasDos.h
 #ifndef CARTA_MASDOS_H
 #define CARTA_MASDOS_H
 #include "Carta.h"
@@ -12,3 +12,4 @@ public:
 };
 
 #endif
+*/

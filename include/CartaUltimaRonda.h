@@ -1,4 +1,4 @@
-// CartaUltimaRonda.h
+/* CartaUltimaRonda.h
 #ifndef CARTA_ULTIMA_RONDA_H
 #define CARTA_ULTIMA_RONDA_H
 #include "Carta.h"
@@ -12,3 +12,4 @@ public:
 };
 
 #endif
+*/

@@ -1,4 +1,4 @@
-#include "include/Juego.h"
+#include "/Juego.h"
 #include <iostream>
 
 Juego::Juego(int numJugadores) {

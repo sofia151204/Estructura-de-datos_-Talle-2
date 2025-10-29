@@ -1,4 +1,4 @@
-// CartaComodin.h
+/* CartaComodin.h
 #ifndef CARTA_COMODIN_H
 #define CARTA_COMODIN_H
 #include "Carta.h"
@@ -14,3 +14,4 @@ public:
 };
 
 #endif
+*/

@@ -1,6 +1,4 @@
-// CartaColor.h
-#ifndef CARTA_COLOR_H
-#define CARTA_COLOR_H
+/*#pragma once
 
 #include "Carta.h"
 #include <iostream>  
@@ -18,5 +16,4 @@ public:
  
 
 };
-
-#endif
+*/
