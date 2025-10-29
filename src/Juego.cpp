@@ -1,4 +1,4 @@
-#include "/Juego.h"
+#include "Juego.h"
 #include <iostream>
 
 Juego::Juego(int numJugadores) {
@@ -9,14 +9,14 @@ Juego::Juego(int numJugadores) {
 }
 
 void Juego::iniciar() {
-    std::cout << "🎮 Iniciando Coloretto clásico (" << jugadores.size() << " jugadores)\n\n";
+    std::cout << "Iniciando Coloretto clasico (" << jugadores.size() << " jugadores)\n\n";
     
     bool fin = false;
     int turno = 0;
     while (!mazo->vacio() && !fin) {
         Carta* carta = mazo->robarCarta();
         if (carta->getColor() == "FIN") {
-            std::cout << "🚩 ¡Carta de Fin de juego revelada!\n";
+            std::cout << "Carta de Fin de juego revelada!\n";
             fin = true;
             delete carta;
         } else {

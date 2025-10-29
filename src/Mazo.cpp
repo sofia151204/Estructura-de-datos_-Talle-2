@@ -1,4 +1,4 @@
-#include "/Mazo.h"
+#include "Mazo.h"
 #include <iostream>
 
 Mazo::Mazo() {
@@ -42,5 +42,5 @@ Mazo::~Mazo() {
         delete cartas[i];
     }
     delete[] cartas;
-    std::cout << "🂠 Mazo destruido correctamente.\n";
+    std::cout << "Mazo destruido correctamente.\n";
 }

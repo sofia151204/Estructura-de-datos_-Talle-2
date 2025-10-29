@@ -1,4 +1,4 @@
-#include "/Jugador.h"
+#include "Jugador.h"
 #include <iostream>
 
 Jugador::Jugador(std::string nombre) : nombre(nombre) {}
