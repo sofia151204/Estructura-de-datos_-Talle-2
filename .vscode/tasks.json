@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Coloretto",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "src/*.cpp",
+        "main.cpp",
+        "-Iinclude",
+        "-std=c++17",
+        "-g",
+        "-O0",
+        "-static-libstdc++",
+        "-static-libgcc",
+        "-o",
+        "coloreto.exe"
+      ],
+      "options": {
+        "env": {
+          "PATH": "C:/msys64/mingw64/bin;${env:PATH}"
+        }
+      },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
