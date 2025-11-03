@@ -14,4 +14,6 @@ public:
     void recibirCarta(Carta* c);
     void mostrarCartas() const;
     string getNombre() const;
+
+    const std::vector<Carta*>& getCartas() const { return cartas; }
 };

@@ -10,16 +10,18 @@ using namespace std;
 
 class Juego {
 private:
-    Ronda* ronda;          // controla estado de la ronda (quién ya tomó)
-    bool hayCartaFin;      // si salió la carta FIN
-    void mostrarPuntajesFinales();
-    vector<Jugador*> jugadores;
     Mazo* mazo;
-    vector<Pila> pilas;
+    std::vector<Pila*> pilas;
+    std::vector<Jugador*> jugadores;
     int turnoActual;
 
+    Ronda* ronda;          // controla estado de la ronda (quién ya tomó)
+    bool hayCartaFin;      // si salió la carta FIN
+
+    void mostrarPuntajesFinales();
+
 public:
-    Juego(int numJugadores);
+    explicit Juego(int numJugadores);
     ~Juego();
 
     void iniciar();

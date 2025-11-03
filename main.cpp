@@ -1,7 +1,7 @@
 #include "juego.h"
 
 int main() {
-    Juego partida(3);
-    partida.iniciar();
+    Juego juego(3);
+    juego.iniciar();
     return 0;
 }
