@@ -16,7 +16,8 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": ["$gcc"],
+      "detail": "Compila el proyecto Coloretto"
     }
   ]
 }

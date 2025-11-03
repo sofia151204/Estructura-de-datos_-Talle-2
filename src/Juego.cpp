@@ -1,4 +1,4 @@
-#include "juego.h"
+#include "../include/juego.h"
 #include <iostream>
 #include <iomanip>
 #include <limits>
