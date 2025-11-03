@@ -36,7 +36,7 @@ Juego::Juego(int numJugadores) {
     for(int i = 0; i < 3; ++i) {
         pilas.push_back(new Pila()); // agrega una nueva pila
     }
-    
+
     ronda = new Ronda(numJugadores, /*max cartas por pila*/ 3);
     hayCartaFin = false;
 }
@@ -44,7 +44,13 @@ Juego::Juego(int numJugadores) {
 Juego::~Juego() {
     delete ronda;
     delete mazo;
-    for (Jugador* p : jugadores) delete p;
+
+    for (Pila* p : pilas) {
+        // por seguridad: si quedó alguna carta en la pila, liberarla
+        for (Carta* c : p->obtenerCartas()) delete c;
+        delete p;
+    }
+    for (Jugador* j : jugadores) delete j;
 }
 
 void Juego::iniciar() {
