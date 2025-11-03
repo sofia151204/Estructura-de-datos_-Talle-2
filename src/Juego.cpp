@@ -1,4 +1,4 @@
-#include "Juego.h"
+#include "juego.h"
 #include <iostream>
 #include <limits>
 #include <string>
@@ -29,11 +29,14 @@ Juego::Juego(int numJugadores) {
     }
     pilas.resize(3); // 3 pilas en el centro
     turnoActual = 0;
+    ronda = new Ronda(numJugadores, /*max cartas por pila*/ 3);
+    hayCartaFin = false;
 }
 
 Juego::~Juego() {
+    delete ronda;
     delete mazo;
-    for (auto p : jugadores) delete p;
+    for (Jugador* p : jugadores) delete p;
 }
 
 void Juego::iniciar() {
