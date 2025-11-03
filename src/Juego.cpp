@@ -24,20 +24,39 @@ static int leerEnteroSeguro(int minVal, int maxVal) { // valida que la entrada s
     }
 }
 
+// Juego::Juego(int numJugadores) {
+//     mazo = new Mazo(); // usa tu Mazo existente
+//     turnoActual = 0;
+
+//     jugadores.reserve(numJugadores);
+//     for (int i = 0; i < numJugadores; ++i) {
+//         jugadores.push_back(new Jugador("Jugador " + to_string(i + 1)));
+//     }
+//     //pilas.resize(3); // 3 pilas en el centro
+//     for(int i = 0; i < 3; ++i) {
+//         pilas.push_back(new Pila()); // agrega una nueva pila
+//     }
+
+//     ronda = new Ronda(numJugadores, /*max cartas por pila*/ 3);
+//     hayCartaFin = false;
+// }
+
 Juego::Juego(int numJugadores) {
-    mazo = new Mazo(); // usa tu Mazo existente
+    mazo = new Mazo();
     turnoActual = 0;
 
     jugadores.reserve(numJugadores);
     for (int i = 0; i < numJugadores; ++i) {
-        jugadores.push_back(new Jugador("Jugador " + to_string(i + 1)));
-    }
-    //pilas.resize(3); // 3 pilas en el centro
-    for(int i = 0; i < 3; ++i) {
-        pilas.push_back(new Pila()); // agrega una nueva pila
+        cout << "Ingrese el nombre del jugador " << (i + 1) << ": ";
+        string nombre;
+        cin >> nombre;
+        jugadores.push_back(new Jugador(nombre));
     }
 
-    ronda = new Ronda(numJugadores, /*max cartas por pila*/ 3);
+    for (int i = 0; i < 3; ++i)
+        pilas.push_back(new Pila());
+
+    ronda = new Ronda(numJugadores, 3);
     hayCartaFin = false;
 }
 
