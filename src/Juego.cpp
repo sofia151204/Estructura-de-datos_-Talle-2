@@ -96,6 +96,8 @@ void Juego::iniciar() {
             }
 
             // Decidir si existe al menos UNA pila disponible para robar/colocar
+            
+            // Menú según disponibilidad real
             bool vacias     = todasPilasVacias();
             bool puedeRobar = hayPilaDisponibleParaRobar();
 
@@ -103,18 +105,15 @@ void Juego::iniciar() {
                 puedeRobar = vacias; // true solo si todas vacias; false en cualquier otro caso
             }
 
-            // Menú según disponibilidad real
+            // ⚠️ NO prohíbas robar por hayCartaFin. La ronda sigue normal hasta que todos tomen.
             int accion;
-            if (vacias && puedeRobar) {
-                // todas vacias: solo tiene sentido robar (aunque haya FIN)
-                cout << "Elige accion (1=Robar/colocar): ";
-                accion = 1;
-            } else if (!puedeRobar) {
-                // no hay pilas validas para colocar (llenas/bloqueadas) o FIN con pilas no vacias
+            if (!puedeRobar) {
                 cout << "Elige accion (2=Tomar pila): ";
                 accion = 2;
+            } else if (vacias) {
+                cout << "Elige accion (1=Robar/colocar): ";
+                accion = 1;
             } else {
-                // caso normal: ambas opciones disponibles
                 cout << "Elige accion (1=Robar/colocar, 2=Tomar pila): ";
                 accion = leerEnteroSeguro(1, 2);
             }
@@ -182,16 +181,30 @@ void Juego::iniciar() {
         if (hayCartaFin) {
             cout << "\n*** FIN DE LA PARTIDA ***\n";
             mostrarPuntajesFinales();
-            menuFinPartida();    // ← pregunta si nueva partida o salir
-            return;
+            if (menuFinPartida()) {
+                resetPartida();
+                cout << "\n--- Nueva partida iniciada! ---\n";
+                // reinicia variables de control de la ronda y vuelve al while(true) principal
+                jugadorActual = 0;                 // opcional: arranca por Jugador 1
+                continue;                          // ← vuelve a “NUEVA RONDA”
+            } else {
+                return;                            // salir definitivamente
+            }
         }
 
         // Si no hubo FIN pero el mazo se agotó al cerrar la ronda, también termina
         if (mazo->vacio()) {
             cout << "\nEl mazo se ha agotado. La partida ha terminado.\n";
             mostrarPuntajesFinales();
-            menuFinPartida();    // ← pregunta si nueva partida o salir
-            return;
+            if (menuFinPartida()) {
+                resetPartida();
+                cout << "\n--- Nueva partida iniciada! ---\n";
+                // reinicia variables de control de la ronda y vuelve al while(true) principal
+                jugadorActual = 0;                 // opcional: arranca por Jugador 1
+                continue;                          // ← vuelve a “NUEVA RONDA”
+            } else {
+                return;                            // salir definitivamente
+            }
         }
 
     }
@@ -199,7 +212,13 @@ void Juego::iniciar() {
     // Guard clause: si por algún motivo saliéramos del while(true)
     cout << "\n*** FIN DE LA PARTIDA (salida inesperada del bucle) ***\n";
     mostrarPuntajesFinales();
-    menuFinPartida();    // ← pregunta si nueva partida o salir
+    // if (menuFinPartida()) {
+    //     resetPartida();
+    //     jugadorActual = 0;                 // opcional: arranca por Jugador 1
+    //     continue;                          // ← vuelve a “NUEVA RONDA”
+    // } else {
+    //     return;                            // salir definitivamente
+    // }    // ← pregunta si nueva partida o salir
 }
 
 void Juego::turno() {
@@ -336,52 +355,29 @@ bool Juego::todasPilasVacias() const {
     return true;
 }
 
-void Juego::menuFinPartida() {
+bool Juego::menuFinPartida() {
     while (true) {
         cout << "\n=== Fin de la partida ===\n";
         cout << "1) Nueva partida (conservar nombres)\n";
         cout << "2) Salir\n";
         cout << "Elige (1-2): ";
         int op = leerEnteroSeguro(1, 2);
-        if (op == 1) {
-            resetPartida();
-            // volvemos a correr el bucle de iniciar() desde el principio
-            cout << "\n*** Nueva partida ***\n";
-            // OJO: si quieres volver a pedir nombres cada vez, descomenta:
-            // (y quita el return del final para no salir de iniciar())
-            // for (size_t i = 0; i < jugadores.size(); ++i) {
-            //     cout << "Nombre para Jugador " << (i+1)
-            //          << " [actual: " << jugadores[i]->getNombre() << "]: ";
-            //     std::string nuevo;
-            //     std::getline(cin >> std::ws, nuevo);
-            //     if (!nuevo.empty()) jugadores[i]->setNombre(nuevo);
-            // }
-            break; // salimos del menú y continuarás en iniciar()
-        } else {
-            cout << "Gracias por jugar. Hasta pronto.\n";
-            // dejamos que iniciar() haga return inmediatamente después de llamar a este menú
-            break;
-        }
+        if (op == 1) return true;   // → Nueva partida
+        else if (op == 2) return false; // → Salir
     }
 }
 
+
 void Juego::resetPartida() {
-    // Reiniciar mazo
     delete mazo;
     mazo = new Mazo();
 
-    // Vaciar y desbloquear pilas
-    for (size_t i = 0; i < pilas.size(); ++i) {
-        pilas[i]->vaciar();
-    }
+    for (auto* p : pilas) p->vaciar();
     pilaBloqueada.assign(pilas.size(), false);
 
-    // Limpiar manos de jugadores (conservando nombres)
-    for (auto* J : jugadores) {
-        J->limpiarCartas();
-    }
+    for (auto* J : jugadores) J->limpiarCartas();  // conserva nombres
 
-    // Reset flags de ronda y fin
     hayCartaFin = false;
     ronda->iniciarNueva();
 }
+
