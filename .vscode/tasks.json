@@ -6,14 +6,12 @@
       "type": "shell",
       "command": "g++",
       "args": [
-        "src/*.cpp",
-        "main.cpp",
-        "-Iinclude",
         "-std=c++17",
         "-g",
         "-O0",
-        "-static-libstdc++",
-        "-static-libgcc",
+        "-Iinclude",
+        "main.cpp",
+        "src/*.cpp",
         "-o",
         "coloreto.exe"
       ],
@@ -27,3 +25,4 @@
     }
   ]
 }
+

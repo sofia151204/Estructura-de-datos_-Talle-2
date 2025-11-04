@@ -13,4 +13,10 @@ public:
     void mostrar() const;
     string toString() const;
 
+    bool esFin() const {
+        std::string c = getColor();
+        for (auto &ch : c) ch = std::toupper(static_cast<unsigned char>(ch));
+        return c == "FIN";
+    }
+
 };

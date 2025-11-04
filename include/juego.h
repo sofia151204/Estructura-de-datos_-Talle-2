@@ -11,6 +11,7 @@ using namespace std;
 class Juego {
 private:
     Mazo* mazo;
+    std::vector<bool> pilaBloqueada;
     std::vector<Pila*> pilas;
     std::vector<Jugador*> jugadores;
     int turnoActual;
@@ -18,7 +19,13 @@ private:
     Ronda* ronda;          // controla estado de la ronda (quién ya tomó)
     bool hayCartaFin;      // si salió la carta FIN
 
+    //vector<bool> pilaBloqueada;
+
     void mostrarPuntajesFinales();
+
+    bool hayPilaDisponibleParaRobar() const;
+    bool pilaDisponible(int idx) const;
+    bool todasPilasVacias() const;
 
 public:
     explicit Juego(int numJugadores);
