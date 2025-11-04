@@ -25,4 +25,9 @@ void Jugador::mostrarCartas() const {
     }
 }
 
+void Jugador::limpiarCartas() {
+    for (Carta* c : cartas) delete c;
+    cartas.clear();
+}
+
 string Jugador::getNombre() const { return nombre; }

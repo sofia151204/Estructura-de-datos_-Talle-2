@@ -181,14 +181,16 @@ void Juego::iniciar() {
         if (hayCartaFin) {
             cout << "\n*** FIN DE LA PARTIDA ***\n";
             mostrarPuntajesFinales();
-            return; // salir de iniciar()
+            menuFinPartida();    // ← pregunta si nueva partida o salir
+            return;
         }
 
         // 🔚 Si no hubo FIN pero el mazo se agotó al cerrar la ronda, también termina
         if (mazo->vacio()) {
             cout << "\nEl mazo se ha agotado. La partida ha terminado.\n";
             mostrarPuntajesFinales();
-            return; // salir de iniciar()
+            menuFinPartida();    // ← pregunta si nueva partida o salir
+            return;
         }
 
         // Si quieres limpiar pilas entre rondas, descomenta:
@@ -198,6 +200,7 @@ void Juego::iniciar() {
     // Guard clause: si por algún motivo saliéramos del while(true)
     cout << "\n*** FIN DE LA PARTIDA (salida inesperada del bucle) ***\n";
     mostrarPuntajesFinales();
+    menuFinPartida();    // ← pregunta si nueva partida o salir
 }
 
 void Juego::turno() {
@@ -333,4 +336,54 @@ bool Juego::todasPilasVacias() const {
         if (p->tamano() > 0) return false;
     }
     return true;
+}
+
+void Juego::menuFinPartida() {
+    while (true) {
+        cout << "\n=== Fin de la partida ===\n";
+        cout << "1) Nueva partida (conservar nombres)\n";
+        cout << "2) Salir\n";
+        cout << "Elige (1-2): ";
+        int op = leerEnteroSeguro(1, 2);
+        if (op == 1) {
+            resetPartida();
+            // volvemos a correr el bucle de iniciar() desde el principio
+            cout << "\n*** Nueva partida ***\n";
+            // OJO: si quieres volver a pedir nombres cada vez, descomenta:
+            // (y quita el return del final para no salir de iniciar())
+            // for (size_t i = 0; i < jugadores.size(); ++i) {
+            //     cout << "Nombre para Jugador " << (i+1)
+            //          << " [actual: " << jugadores[i]->getNombre() << "]: ";
+            //     std::string nuevo;
+            //     std::getline(cin >> std::ws, nuevo);
+            //     if (!nuevo.empty()) jugadores[i]->setNombre(nuevo);
+            // }
+            break; // salimos del menú y continuarás en iniciar()
+        } else {
+            cout << "Gracias por jugar. Hasta pronto.\n";
+            // dejamos que iniciar() haga return inmediatamente después de llamar a este menú
+            break;
+        }
+    }
+}
+
+void Juego::resetPartida() {
+    // Reiniciar mazo
+    delete mazo;
+    mazo = new Mazo();
+
+    // Vaciar y desbloquear pilas
+    for (size_t i = 0; i < pilas.size(); ++i) {
+        pilas[i]->vaciar();
+    }
+    pilaBloqueada.assign(pilas.size(), false);
+
+    // Limpiar manos de jugadores (conservando nombres)
+    for (auto* J : jugadores) {
+        J->limpiarCartas();
+    }
+
+    // Reset flags de ronda y fin
+    hayCartaFin = false;
+    ronda->iniciarNueva();
 }

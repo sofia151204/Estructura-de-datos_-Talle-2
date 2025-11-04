@@ -14,6 +14,8 @@ public:
     void recibirCarta(Carta* c);
     void mostrarCartas() const;
     string getNombre() const;
+    void setNombre(const std::string& n) { nombre = n; }   // para ajustar el nombre
+    void limpiarCartas();
 
     const std::vector<Carta*>& getCartas() const { return cartas; }
 };

@@ -22,6 +22,8 @@ private:
     //vector<bool> pilaBloqueada;
 
     void mostrarPuntajesFinales();
+    void menuFinPartida();          // menú al terminar (nueva partida / salir)
+    void resetPartida();
 
     bool hayPilaDisponibleParaRobar() const;
     bool pilaDisponible(int idx) const;
