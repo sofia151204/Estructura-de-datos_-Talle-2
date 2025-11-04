@@ -177,7 +177,6 @@ void Juego::iniciar() {
 
         // === RONDA CERRADA AQUÍ ===
 
-        // Si se reveló FIN, NO arranques otra ronda: termina y puntúa
         if (hayCartaFin) {
             cout << "\n*** FIN DE LA PARTIDA ***\n";
             mostrarPuntajesFinales();
@@ -185,7 +184,7 @@ void Juego::iniciar() {
             return;
         }
 
-        // 🔚 Si no hubo FIN pero el mazo se agotó al cerrar la ronda, también termina
+        // Si no hubo FIN pero el mazo se agotó al cerrar la ronda, también termina
         if (mazo->vacio()) {
             cout << "\nEl mazo se ha agotado. La partida ha terminado.\n";
             mostrarPuntajesFinales();
@@ -204,7 +203,6 @@ void Juego::iniciar() {
 }
 
 void Juego::turno() {
-    // (lo de turno() puede quedar como UI alternativa; no es usado en iniciar())
     Jugador* jugador = jugadores[turnoActual];
     cout << "\n--- Turno de " << jugador->getNombre() << " ---\n";
 
@@ -242,7 +240,7 @@ void Juego::turno() {
 
         if (carta->esFin()) {
             cout << "Carta de Fin de juego revelada!\n";
-            delete carta; // FIN no se coloca
+            delete carta;
             return;
         }
 
@@ -349,15 +347,6 @@ void Juego::menuFinPartida() {
             resetPartida();
             // volvemos a correr el bucle de iniciar() desde el principio
             cout << "\n*** Nueva partida ***\n";
-            // OJO: si quieres volver a pedir nombres cada vez, descomenta:
-            // (y quita el return del final para no salir de iniciar())
-            // for (size_t i = 0; i < jugadores.size(); ++i) {
-            //     cout << "Nombre para Jugador " << (i+1)
-            //          << " [actual: " << jugadores[i]->getNombre() << "]: ";
-            //     std::string nuevo;
-            //     std::getline(cin >> std::ws, nuevo);
-            //     if (!nuevo.empty()) jugadores[i]->setNombre(nuevo);
-            // }
             break; // salimos del menú y continuarás en iniciar()
         } else {
             cout << "Gracias por jugar. Hasta pronto.\n";
