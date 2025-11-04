@@ -96,20 +96,21 @@ void Juego::iniciar() {
             }
 
             // Decidir si existe al menos UNA pila disponible para robar/colocar
-            bool puedeRobar = hayPilaDisponibleParaRobar();
             bool vacias     = todasPilasVacias();
+            bool puedeRobar = hayPilaDisponibleParaRobar();
 
-            // Si ya salió FIN, NO se puede robar más en esta ronda
-            if (hayCartaFin) puedeRobar = false;
+            if (hayCartaFin) {
+                puedeRobar = vacias; // true solo si todas vacias; false en cualquier otro caso
+            }
 
             // Menú según disponibilidad real
             int accion;
-            if (vacias && !hayCartaFin) {
-                // todas las pilas están vacías → SOLO se puede robar/colocar (si no ha salido FIN)
+            if (vacias && puedeRobar) {
+                // todas vacias: solo tiene sentido robar (aunque haya FIN)
                 cout << "Elige accion (1=Robar/colocar): ";
                 accion = 1;
             } else if (!puedeRobar) {
-                // no hay ninguna pila válida para colocar (todas llenas/bloqueadas) o ya salió FIN
+                // no hay pilas validas para colocar (llenas/bloqueadas) o FIN con pilas no vacias
                 cout << "Elige accion (2=Tomar pila): ";
                 accion = 2;
             } else {
@@ -120,13 +121,13 @@ void Juego::iniciar() {
 
             if (accion == 1) {
                 if (mazo->vacio()) {
-                    cout << "El mazo está vacío. Debes tomar una pila.\n";
+                    cout << "El mazo esta vacio. Debes tomar una pila.\n";
                 } else {
                     Carta* c = mazo->robarCarta();
                     if (!c) {
                         cout << "No hay carta para robar.\n";
                     } else if (c->esFin()) { // usar helper robusto
-                        cout << "¡Apareció la carta FIN! Al cerrar esta ronda, se puntúa y termina el juego.\n";
+                        cout << "Aparecio la carta FIN. Al cerrar esta ronda, se puntua y termina el juego.\n";
                         hayCartaFin = true;
                         delete c; // FIN no se coloca
                     } else {
@@ -177,6 +178,7 @@ void Juego::iniciar() {
 
         // === RONDA CERRADA AQUÍ ===
 
+        // Si se reveló FIN, NO arranques otra ronda: termina y puntúa
         if (hayCartaFin) {
             cout << "\n*** FIN DE LA PARTIDA ***\n";
             mostrarPuntajesFinales();
@@ -192,8 +194,6 @@ void Juego::iniciar() {
             return;
         }
 
-        // Si quieres limpiar pilas entre rondas, descomenta:
-        // for (auto* p : pilas) p->vaciar();
     }
 
     // Guard clause: si por algún motivo saliéramos del while(true)
@@ -281,7 +281,7 @@ void Juego::turno() {
         // bloquear esa pila hasta la siguiente ronda
         pilaBloqueada[p-1] = true;
 
-        cout << jugador->getNombre() << " tomó la pila " << p << " (ahora BLOQUEADA).\n";
+        cout << jugador->getNombre() << " tomo la pila " << p << " (ahora BLOQUEADA).\n";
     }
     else { // opt == 3
         cout << "Mostrando mano y pilas...\n";
@@ -347,6 +347,15 @@ void Juego::menuFinPartida() {
             resetPartida();
             // volvemos a correr el bucle de iniciar() desde el principio
             cout << "\n*** Nueva partida ***\n";
+            // OJO: si quieres volver a pedir nombres cada vez, descomenta:
+            // (y quita el return del final para no salir de iniciar())
+            // for (size_t i = 0; i < jugadores.size(); ++i) {
+            //     cout << "Nombre para Jugador " << (i+1)
+            //          << " [actual: " << jugadores[i]->getNombre() << "]: ";
+            //     std::string nuevo;
+            //     std::getline(cin >> std::ws, nuevo);
+            //     if (!nuevo.empty()) jugadores[i]->setNombre(nuevo);
+            // }
             break; // salimos del menú y continuarás en iniciar()
         } else {
             cout << "Gracias por jugar. Hasta pronto.\n";
